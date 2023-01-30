@@ -6,7 +6,6 @@ import ticketRepository from '@/repositories/payment-repository';
 
 export async function findPaymentInfo(req: AuthenticatedRequest, res: Response) {
     const {ticketId} = req.query
-    console.log(ticketId)
 
     if (!ticketId) {
         return res.sendStatus(httpStatus.BAD_REQUEST)
@@ -14,6 +13,10 @@ export async function findPaymentInfo(req: AuthenticatedRequest, res: Response) 
 
     try {
         const paymentInfo = (await ticketRepository.findUnique(Number(ticketId)))
+        
+        if(!paymentInfo){
+            return res.sendStatus(httpStatus.NOT_FOUND)
+        }
 
         return res.status(httpStatus.OK).send(paymentInfo)
     } catch (error) {
@@ -24,7 +27,7 @@ export async function findPaymentInfo(req: AuthenticatedRequest, res: Response) 
 export async function createPayment(req: AuthenticatedRequest, res: Response) {
     const {ticketId, cardData} = req.body
 
-    if(!ticketId || !cardData) {
+    if(!cardData) {
         return res.sendStatus(httpStatus.BAD_REQUEST)
     }
 

@@ -8,12 +8,14 @@ import { AuthenticatedRequest } from './authentication-middleware';
 
 export async function enrollmentValidation(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     const userId = req.userId
+
     try {
         const enrollment = await prisma.enrollment.findFirst({
             where: {
-                userId
+                userId,
             }
         })
+
         if(!enrollment) {
             return notFoundedEnrollment(res)
         }
