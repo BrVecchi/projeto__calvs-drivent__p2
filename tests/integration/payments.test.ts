@@ -1,19 +1,21 @@
-import app, { init } from "@/app";
-import { prisma } from "@/config";
-import faker from "@faker-js/faker";
-import { TicketStatus } from "@prisma/client";
-import httpStatus from "http-status";
-import * as jwt from "jsonwebtoken";
-import supertest from "supertest";
+import httpStatus from 'http-status';
+import * as jwt from 'jsonwebtoken';
+import supertest from 'supertest';
+
+import app, { init } from '@/app';
+import { prisma } from '@/config';
+import faker from '@faker-js/faker';
+import { TicketStatus } from '@prisma/client';
+
 import {
-  createEnrollmentWithAddress,
-  createUser,
-  createTicketType,
-  createTicket,
-  createPayment,
-  generateCreditCardData,
-} from "../factories";
-import { cleanDb, generateValidToken } from "../helpers";
+    createEnrollmentWithAddress,
+    createPayment,
+    createTicket,
+    createTicketType,
+    createUser,
+    generateCreditCardData
+} from '../factories';
+import { cleanDb, generateValidToken } from '../helpers';
 
 beforeAll(async () => {
   await init();
@@ -63,7 +65,7 @@ describe("GET /payments", () => {
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
 
-      const response = await server.get("/payments?ticketId=1").set("Authorization", `Bearer ${token}`);
+      const response = await server.get("/payments?ticketId=59765148216").set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
@@ -166,7 +168,7 @@ describe("POST /payments/process", () => {
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
 
-      const body = { ticketId: 1, cardData: generateCreditCardData() };
+      const body = { ticketId: 54984125481, cardData: generateCreditCardData() };
 
       const response = await server.post("/payments/process").set("Authorization", `Bearer ${token}`).send(body);
 
