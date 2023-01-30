@@ -1,14 +1,14 @@
-import "reflect-metadata";
-import "express-async-errors";
-import express, { Express } from "express";
-import cors from "cors";
+import 'reflect-metadata';
+import 'express-async-errors';
 
-import { loadEnv, connectDb, disconnectDB } from "@/config";
+import cors from 'cors';
+import express, { Express } from 'express';
+
+import { connectDb, disconnectDB, loadEnv } from '@/config';
+import { handleApplicationErrors } from '@/middlewares';
+import { authenticationRouter, enrollmentsRouter, eventsRouter, ticketsRouter, usersRouter } from '@/routers';
 
 loadEnv();
-
-import { handleApplicationErrors } from "@/middlewares";
-import { usersRouter, authenticationRouter, eventsRouter, enrollmentsRouter } from "@/routers";
 
 const app = express();
 app
@@ -19,6 +19,7 @@ app
   .use("/auth", authenticationRouter)
   .use("/event", eventsRouter)
   .use("/enrollments", enrollmentsRouter)
+  .use("/tickets", ticketsRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {

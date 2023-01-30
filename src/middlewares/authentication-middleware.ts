@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import httpStatus from "http-status";
-import * as jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+import * as jwt from 'jsonwebtoken';
 
-import { unauthorizedError } from "@/errors";
-import { prisma } from "@/config";
+import { prisma } from '@/config';
+import { unauthorizedError } from '@/errors';
+import { Enrollment } from '@prisma/client';
 
 export async function authenticateToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const authHeader = req.header("Authorization");
@@ -38,4 +39,5 @@ export type AuthenticatedRequest = Request & JWTPayload;
 
 type JWTPayload = {
   userId: number;
+  enrollment: Enrollment
 };
