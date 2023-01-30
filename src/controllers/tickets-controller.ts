@@ -19,6 +19,9 @@ export async function getUserTicket(req: AuthenticatedRequest, res: Response) {
 
     try {
         const userTicket = (await ticketRepository.findUnique(enrollment))
+        if(!userTicket) {
+            return res.sendStatus(httpStatus.NOT_FOUND)
+        }
         return res.status(httpStatus.OK).send(userTicket)
     } catch (error) {
         console.log(error)
@@ -30,9 +33,13 @@ export async function createTicket(req: AuthenticatedRequest, res: Response) {
     const {ticketTypeId} = req.body
     const enrollment = req.enrollment
 
+    if(!ticketTypeId) {
+        return res.sendStatus(httpStatus.BAD_REQUEST)
+    }
+
     try {
         const userTicket = (await ticketRepository.create(ticketTypeId, enrollment))
-        return res.status(httpStatus.OK).send(userTicket)
+        return res.status(httpStatus.CREATED).send(userTicket)
     } catch (error) {
         console.log(error)
         return res.sendStatus(httpStatus.NO_CONTENT)
